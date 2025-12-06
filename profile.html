@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Profile - BTEC Store</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body{
+      background: linear-gradient(135deg, #e9efff, #ffffff);
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .profile-wrapper{
+      max-width: 850px;
+      margin: 50px auto;
+    }
+
+    .profile-card{
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      background: white;
+      padding: 0;
+    }
+
+    .profile-header{
+      padding: 25px;
+      background: linear-gradient(135deg, #33ae02, #04b513);
+      color: white;
+    }
+
+    .profile-header h3{
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .card-body{
+      padding: 25px 35px;
+    }
+
+    .btn-success{
+      background: #53ad04 !important;
+      border: none;
+    }
+
+    .btn-success:hover{
+      background: #48b703 !important;
+    }
+
+    .order-box{
+      background: #f7f9ff;
+      border: 1px solid #e4e8ff;
+      border-radius: 10px;
+      padding: 15px;
+    }
+
+    .order-box strong{
+      color: #0fbb0f;
+    }
+
+    .empty-text{
+      color: #999;
+      font-style: italic;
+      padding: 5px;
+      text-align: center;
+    }
+
+    .form-control{
+      border-radius: 10px;
+    }
+
+    .btn-link{
+      text-decoration: none;
+      color: #3bbc09;
+    }
+
+    .btn-link:hover{
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<div class="profile-wrapper">
+  <div class="profile-card">
+    
+    <div class="profile-header">
+      <h3>My Profile</h3>
+    </div>
+
+    <div class="card-body">
+
+      <div id="notLogged" class="alert alert-warning text-center">
+        You are not logged in.
+        <a href="login.html" class="fw-bold">Login</a>
+        or
+        <a href="register.html" class="fw-bold">Register</a>
+      </div>
+
+      <div id="profileArea" style="display:none;">
+
+        <form id="profileForm">
+
+          <div class="mb-3">
+            <label for="name" class="form-label fw-semibold">Full name</label>
+            <input id="name" class="form-control">
+          </div>
+
+          <div class="mb-3">
+            <label for="name" class="form-label fw-semibold">Email</label>
+            <input id="name" class="form-control">
+          </div>
+
+          <div class="mb-3">
+            <label for="newPwd" class="form-label fw-semibold"> Password</label>
+            <input id="newPwd" type="password" class="form-control" placeholder="Minimum 6 characters">
+          </div>
+
+          <button type="submit" class="btn btn-success px-4">💾 Save</button>
+          <a href="menuhoa.html" class="btn btn-link">⟵ Back to Home</a>
+        </form>
+
+        <hr class="my-4">
+
+        <h5 class="fw-bold mb-3">🛒 Order History</h5>
+        <div id="ordersList" class="empty-text">No orders yet.</div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const currentEmail = localStorage.getItem('email');
+  const profileArea = document.getElementById('profileArea');
+  const notLogged = document.getElementById('notLogged');
+  const ordersList = document.getElementById('ordersList');
+
+  const inputName = document.getElementById('name');
+  const inputEmail = document.getElementById('email');
+  const inputNewPwd = document.getElementById('newPwd');
+
+  if (!currentEmail) {
+    profileArea.style.display = 'none';
+    notLogged.style.display = 'block';
+  } else {
+    notLogged.style.display = 'none';
+    profileArea.style.display = 'block';
+
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const user = users.find(u => u.email === currentEmail);
+
+    if (user) {
+      inputName.value = user.name || '';
+      inputEmail.value = user.email || '';
+    }
+
+    const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+    const myOrders = orders.filter(o => o.email === currentEmail);
+
+    if (myOrders.length === 0) {
+      ordersList.textContent = 'No orders yet.';
+    } else {
+      ordersList.innerHTML = myOrders.map(o => {
+        const date = new Date(o.createdAt).toLocaleString();
+        const itemsHtml = o.items.map(it => 
+          `<li>${it.name} x${it.qty} — <strong>$${it.price}</strong></li>`
+        ).join('');
+
+        const total = o.items.reduce((sum, item) => sum + (item.price * item.qty), 0);
+        
+        return `
+        <div class="order-box mb-3">
+          <strong>Order #${o.id}</strong> — <small>${date}</small>
+          <ul>${itemsHtml}</ul>
+          <div><strong>Total: $${total.toFixed(2)}</strong></div>
+        </div>`;
+      }).join('');
+    }
+  }
+
+  document.getElementById('profileForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const name = inputName.value.trim();
+    const newPwd = inputNewPwd.value;
+
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const idx = users.findIndex(u => u.email === currentEmail);
+
+    if (idx === -1) return alert('User not found');
+
+    if (name) users[idx].name = name;
+    
+    if (newPwd && newPwd.length >= 6) {
+      users[idx].password = newPwd;
+    } else if (newPwd) {
+      return alert('New password must be at least 6 characters.');
+    }
+
+    localStorage.setItem('users', JSON.stringify(users));
+    localStorage.setItem('currentUser', JSON.stringify(users[idx]));
+
+    alert('Profile updated successfully');
+    inputNewPwd.value = '';
+  });
+</script>
+
+</body>
+</html>
