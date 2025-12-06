@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký tài khoản</title>
+
+<style>
+body {
+    margin: 0;
+    background-color: #f1f1f1;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Form Box */
+.form-container {
+    width: 400px;
+    background-color: #cfd2ce;
+    border: 1px solid rgb(180, 182, 179);
+    border-radius: 12px;
+    padding: 30px 35px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    animation: transitionIn-Y-over 0.5s;
+}
+
+/* Title */
+h2 {
+    text-align: center;
+    font-weight: 600;
+    font-size: 26px;
+    margin-bottom: 10px;
+}
+
+.sub-text {
+    text-align: center;
+    color: rgb(254, 255, 255);
+    margin-bottom: 20px;
+}
+
+/* Input */
+.form-group {
+    margin-bottom: 18px;
+}
+
+label {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid rgb(86, 204, 13);
+    font-size: 14px;
+    box-sizing: border-box;
+    transition: 0.3s ease;
+}
+
+input:focus {
+    border-color: #42ba06;
+    box-shadow: 0 0 5px rgba(91, 174, 70, 0.845);
+    outline: none;
+}
+
+/* Button */
+button {
+    width: 100%;
+    padding: 11px;
+    background: #2cc606;
+    color: rgb(51, 186, 6);
+    font-weight: bold;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #26c709;
+}
+
+/* Error */
+#errorMsg {
+    color: rgb(57, 196, 7);
+    text-align: center;
+    margin-top: 10px;
+}
+
+@keyframes transitionIn-Y-over {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="form-container">
+
+    <h2>Register</h2>
+    <p class="sub-text">Create a new account</p>
+
+    <form id="registerForm">
+
+        <div class="form-group">
+            <label>Full name:</label>
+            <input type="text" id="fullname" placeholder="Name">
+        </div>
+
+        <div class="form-group">
+            <label>Phone:</label>
+            <input type="text" id="phone" placeholder="0123456789">
+        </div>
+
+        <div class="form-group">
+            <label>Email:</label>
+            <input type="email" id="email" placeholder="Email">
+        </div>
+
+        <div class="form-group">
+            <label>Password:</label>
+            <input type="password" id="password" placeholder="Password">
+        </div>
+
+        <div class="form-group">
+            <label>Re-enter password:</label>
+            <input type="password" id="confirmPassword" placeholder="Re-enter password">
+        </div>
+
+        <button type="submit" onclick="register()">Register an account</button>
+    </form>
+
+    <p id="errorMsg"></p>
+</div>
+
+<script>
+document.getElementById("registerForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    let fullname = document.getElementById("fullname").value.trim();
+    let phone = document.getElementById("phone").value.trim();
+    let email = document.getElementById("email").value.trim();
+    let password = document.getElementById("password").value;
+    let confirmPassword = document.getElementById("confirmPassword").value;
+
+    let error = "";
+
+    if (fullname === "") {
+        error = "Họ tên không được để trống";
+    }
+    else if (phone === "" || phone.length < 9 || isNaN(phone)) {
+        error = "Số điện thoại không hợp lệ";
+    }
+    else if (email === "") {
+        error = "Email không được để trống";
+    }
+    else if (!email.includes("@") || !email.includes(".")) {
+        error = "Email không hợp lệ";
+    }
+    else if (password.length < 6) {
+        error = "Mật khẩu phải ít nhất 6 ký tự";
+    }
+    else if (password !== confirmPassword) {
+        error = "Mật khẩu nhập lại không khớp";
+    }
+
+    if (error !== "") {
+        document.getElementById("errorMsg").style.color = "red";
+        document.getElementById("errorMsg").textContent = error;
+    } else {
+        document.getElementById("errorMsg").style.color = "green";
+        document.getElementById("errorMsg").textContent = "Đăng ký thành công!";
+    }
+});
+
+        function register() {
+            let username = document.getElementById('email').value;
+            let password = document.getElementById('password').value;
+            localStorage.setItem('email', username);
+            localStorage.setItem('password', password);
+            console.log(localStorage);
+            alert('Đăng ký tài khoản thành công');
+            window.location.href = "login.html"; // đổi tên nếu trang bạn là index.html
+            } 
+
+        
+   
+</script>
+
+
+</body>
+</html>
