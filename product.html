@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Product</title>
+
+    <style>
+        body {
+            background-color: #f3f3f3;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 450px;
+            margin: 50px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ccc;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 4px;
+        }
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #bbb;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #28a745;
+            color: white;
+            border: none;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+        button:hover {
+            background: #218838;
+        }
+        .link-home {
+            text-align: center;
+            margin-top: 15px;
+        }
+        .link-home a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        .link-home a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Add New Product</h2>
+
+    <!-- Khi submit → quay về menuhoa.html -->
+    <form action="menuhoa.html" method="get">
+        <div class="input-group">
+            <label>Product Name</label>
+            <input type="text" name="product_name" placeholder="Enter product name" required>
+        </div>
+
+        <div class="input-group">
+            <label>Price</label>
+            <input type="number" name="price" step="0.01" placeholder="Enter price" required>
+        </div>
+
+        <div class="input-group">
+            <label>Description</label>
+            <textarea name="description" rows="3" placeholder="Enter description"></textarea>
+        </div>
+
+        <div class="input-group">
+            <label>Product Image</label>
+            <input type="file" name="image" required>
+        </div>
+
+        <button type="submit">Add Product</button>
+    </form>
+
+    <div class="link-home">
+        ➤ <a href="menuhoa.html">Back to Home Page</a>
+    </div>
+</div>
+
+</body>
+</html>
